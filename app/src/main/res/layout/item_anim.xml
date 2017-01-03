@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:gravity="center"
+              android:orientation="vertical"
+              android:padding="8dp">
+
+    <Button
+        android:id="@+id/item_b_start"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/colorAccent"
+        android:textColor="@android:color/white"
+        tools:text="@string/start"/>
+
+    <ImageView
+        android:id="@+id/item_iv_img"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:contentDescription="@null"
+        tools:src="@drawable/jessica_square"/>
+
+</LinearLayout>

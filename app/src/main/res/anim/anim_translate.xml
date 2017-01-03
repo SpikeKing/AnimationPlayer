@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+     android:fillAfter="true"
+     android:interpolator="@android:anim/accelerate_interpolator">
+
+    <!--平移动画-->
+    <translate
+        android:duration="2000"
+        android:fromXDelta="0"
+        android:fromYDelta="0"
+        android:toXDelta="50"
+        android:toYDelta="-100"/>
+
+</set>
