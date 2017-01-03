@@ -12,10 +12,6 @@
         android:duration="250"/>
 
     <item
-        android:drawable="@drawable/soo_square"
-        android:duration="250"/>
-
-    <item
         android:drawable="@drawable/sunny_square"
         android:duration="250"/>
 
