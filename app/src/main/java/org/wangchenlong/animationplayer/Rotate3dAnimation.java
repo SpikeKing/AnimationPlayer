@@ -38,26 +38,29 @@ public class Rotate3dAnimation extends Animation {
 
     @Override protected void applyTransformation(float interpolatedTime, Transformation t) {
         final float fromDegrees = mFromDegrees;
-        float degrees = fromDegrees + ((mToDegrees - fromDegrees) * interpolatedTime);
+        float degrees = fromDegrees + ((mToDegrees - fromDegrees) * interpolatedTime); // 结尾度数
 
+        // 中心点
         final float centerX = mCenterX;
         final float centerY = mCenterY;
 
         final Camera camera = mCamera;
         final Matrix matrix = t.getMatrix();
 
-        camera.save();
+        camera.save(); // 照相机
 
+        // Z轴平移
         if (mReverse) {
             camera.translate(0.0f, 0.0f, mDepthZ * interpolatedTime);
         } else {
             camera.translate(0.0f, 0.0f, mDepthZ * (1.0f - interpolatedTime));
         }
 
-        camera.rotateY(degrees);
+        camera.rotateY(degrees); // Y轴旋转
         camera.getMatrix(matrix);
         camera.restore();
 
+        // View的中心点进行旋转
         matrix.preTranslate(-centerX, -centerY);
         matrix.postTranslate(centerX, centerX);
 

@@ -10,7 +10,6 @@ import android.support.annotation.DrawableRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,27 +29,16 @@ public class MainActivity extends AppCompatActivity {
     private Context mContext;
     private ArrayList<Animation> mAnimations;
     private @DrawableRes int[] mImages = {
-            R.drawable.jessica_square,
-            R.drawable.tiffany_square,
-            R.drawable.taeyeon_square,
-            R.drawable.yoona_square,
-            R.drawable.yuri_square,
-            R.drawable.soo_square,
-            R.drawable.seo_square,
-            R.drawable.kim_square,
+            R.drawable.jessica_square, R.drawable.tiffany_square,
+            R.drawable.taeyeon_square, R.drawable.yoona_square,
+            R.drawable.yuri_square, R.drawable.soo_square,
+            R.drawable.seo_square, R.drawable.kim_square,
             R.drawable.sunny_square
     };
     private @DrawableRes int mFrame = R.drawable.anim_images;
     private String[] mTexts = {
-            "平移",
-            "缩放",
-            "旋转",
-            "透明",
-            "混合",
-            "自定",
-            "帧动",
-            "属性",
-            "差值"
+            "平移", "缩放", "旋转", "透明", "混合",
+            "自定", "帧动", "Wrapper", "差值"
     };
 
     @Override
@@ -110,19 +98,19 @@ public class MainActivity extends AppCompatActivity {
             holder.getButton().setText(mTexts[position]);
 
             switch (position) {
-                case 8:
-                    performValueAnimation(holder.getImageView(), 0, Utils.dp2px(mContext, 120));
+                case 8: // 使用差值属性动画
+                    performListenerAnimation(holder.getImageView(), 0, Utils.dp2px(mContext, 120));
                     holder.getButton().setOnClickListener(new View.OnClickListener() {
                         @Override public void onClick(View v) {
-                            performValueAnimation(holder.getImageView(), 0, Utils.dp2px(mContext, 120));
+                            performListenerAnimation(holder.getImageView(), 0, Utils.dp2px(mContext, 120));
                         }
                     });
                     break;
-                case 7:
-                    performValueAnimation(holder.getImageView());
+                case 7: // 使用Wrapper属性动画
+                    performWrapperAnimation(holder.getImageView(), 0, Utils.dp2px(mContext, 120));
                     holder.getButton().setOnClickListener(new View.OnClickListener() {
                         @Override public void onClick(View v) {
-                            performValueAnimation(holder.getImageView());
+                            performWrapperAnimation(holder.getImageView(), 0, Utils.dp2px(mContext, 120));
                         }
                     });
                     break;
@@ -147,6 +135,12 @@ public class MainActivity extends AppCompatActivity {
             setAnimation(holder.getContainer(), position);
         }
 
+        /**
+         * RecyclerList设置每一项的加载动画
+         *
+         * @param viewToAnimate 项目视图
+         * @param position      位置
+         */
         private void setAnimation(View viewToAnimate, int position) {
             if (position > mLastPosition || mLastPosition == -1) {
                 Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
@@ -155,16 +149,16 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        private void performValueAnimation(View view) {
-            ViewWrapper vw = new ViewWrapper(view);
-            ObjectAnimator.ofInt(vw, "width", 0, Utils.dp2px(view.getContext(), 120))
-                    .setDuration(2000).start(); // 启动动画
-        }
-
-        private void performValueAnimation(final View target, final int start, final int end) {
+        /**
+         * 通过差值执行属性动画
+         *
+         * @param view  目标视图
+         * @param start 起始宽度
+         * @param end   终止宽度
+         */
+        private void performListenerAnimation(final View view, final int start, final int end) {
             ValueAnimator valueAnimator = ValueAnimator.ofInt(1, 100);
             valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
                 // 持有一个IntEvaluator对象，方便下面估值的时候使用
                 private IntEvaluator mEvaluator = new IntEvaluator();
 
@@ -175,31 +169,43 @@ public class MainActivity extends AppCompatActivity {
 
                     // 获得当前进度占整个动画过程的比例，浮点型，0-1之间
                     float fraction = animator.getAnimatedFraction();
-
                     // 直接调用整型估值器通过比例计算出宽度，然后再设给Button
-                    target.getLayoutParams().width = mEvaluator.evaluate(fraction, start, end);
-                    target.requestLayout();
+                    view.getLayoutParams().width = mEvaluator.evaluate(fraction, start, end);
+                    view.requestLayout();
                 }
             });
-
             valueAnimator.setDuration(2000).start();
         }
 
+        /**
+         * 通过Wrapper实现属性动画
+         *
+         * @param view  目标视图
+         * @param start 起始宽度
+         * @param end   终止宽度
+         */
+        private void performWrapperAnimation(final View view, final int start, final int end) {
+            ViewWrapper vw = new ViewWrapper(view);
+            ObjectAnimator.ofInt(vw, "width", start, end).setDuration(2000).start(); // 启动动画
+        }
 
+        // 视图包装, 提供Width的get和set方法
         private static class ViewWrapper {
-            private View mTarget;
+            private View mView;
 
-            public ViewWrapper(View target) {
-                mTarget = target;
+            public ViewWrapper(View view) {
+                mView = view;
             }
 
+            @SuppressWarnings("unused")
             public int getWidth() {
-                return mTarget.getLayoutParams().width;
+                return mView.getLayoutParams().width;
             }
 
+            @SuppressWarnings("unused")
             public void setWidth(int width) {
-                mTarget.getLayoutParams().width = width;
-                mTarget.requestLayout();
+                mView.getLayoutParams().width = width;
+                mView.requestLayout();
             }
         }
 
@@ -208,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // 列表适配器的ViewHolder
     private static class GridViewHolder extends RecyclerView.ViewHolder {
         private ImageView mImageView;
         private Button mButton;

@@ -8,6 +8,14 @@
         android:toXDelta="0"
         android:toYDelta="0"/>
 
+    <!--缩放动画-->
+    <scale
+        android:duration="2000"
+        android:fromXScale="0.0"
+        android:fromYScale="0.0"
+        android:toXScale="1.0"
+        android:toYScale="1.0"/>
+
     <!--旋转动画-->
     <rotate
         android:duration="2000"
@@ -16,15 +24,9 @@
         android:pivotY="50%"
         android:toDegrees="-720"/>
 
+    <!--透明动画-->
     <alpha
         android:duration="2000"
         android:fromAlpha="0.1"
         android:toAlpha="1.0"/>
-
-    <scale
-        android:duration="2000"
-        android:fromXScale="0.0"
-        android:fromYScale="0.0"
-        android:toXScale="1.0"
-        android:toYScale="1.0"/>
 </set>

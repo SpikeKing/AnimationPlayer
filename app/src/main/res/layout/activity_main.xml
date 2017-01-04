@@ -11,6 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="org.wangchenlong.animationplayer.MainActivity">
 
+    <!--列表-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_rv_grid"
         android:layout_width="match_parent"

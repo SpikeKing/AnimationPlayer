@@ -2,7 +2,6 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android"
      android:fillAfter="true"
      android:interpolator="@android:anim/accelerate_interpolator">
-
     <!--平移动画-->
     <translate
         android:duration="2000"
@@ -10,5 +9,4 @@
         android:fromYDelta="-100"
         android:toXDelta="0"
         android:toYDelta="0"/>
-
 </set>
