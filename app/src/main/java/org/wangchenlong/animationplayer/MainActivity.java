@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initAnimations(Context context) {
+        // 添加多种动画
         mAnimations = new ArrayList<>();
         mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_translate));
         mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_scale));
