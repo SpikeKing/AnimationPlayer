@@ -23,12 +23,12 @@ public class Rotate3dAnimation extends Animation {
             float fromDegrees, float toDegrees,
             float centerX, float centerY,
             float depthZ, boolean reverse) {
-        mFromDegrees = fromDegrees;
-        mToDegrees = toDegrees;
-        mCenterX = centerX;
-        mCenterY = centerY;
-        mDepthZ = depthZ;
-        mReverse = reverse;
+        mFromDegrees = fromDegrees;  // 起始角度
+        mToDegrees = toDegrees;  // 目标角度
+        mCenterX = centerX;  // 旋转中心的X轴
+        mCenterY = centerY;  // 旋转中心的Y轴
+        mDepthZ = depthZ;  // 深度Z轴
+        mReverse = reverse; // 是否反转
     }
 
     @Override public void initialize(int width, int height, int parentWidth, int parentHeight) {

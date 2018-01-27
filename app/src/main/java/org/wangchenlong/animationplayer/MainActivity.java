@@ -35,38 +35,36 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.seo_square, R.drawable.kim_square,
             R.drawable.sunny_square
     };
-    private @DrawableRes int mFrame = R.drawable.anim_images;
+    private @DrawableRes int mFrames = R.drawable.anim_images; // 帧动画图像
     private String[] mTexts = {
             "平移", "缩放", "旋转", "透明", "混合",
             "自定", "帧动", "Wrapper", "差值"
     };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        ButterKnife.bind(this);  // 绑定布局ID
 
-        mContext = getApplicationContext();
+        mContext = getApplicationContext();  // 上下文
 
-        initAnimations(mContext);
+        initAnimations(mContext);  // 创建动画组合
 
         mRvGrid.setLayoutManager(new GridLayoutManager(mContext, 2)); // 每行两列
-        mRvGrid.setAdapter(new GridAdapter(mContext, mAnimations, mFrame, mTexts, mImages));
+        mRvGrid.setAdapter(new GridAdapter(mContext, mAnimations, mFrames, mTexts, mImages));  // 设置适配器
     }
 
     private void initAnimations(Context context) {
-        // 添加多种动画
         mAnimations = new ArrayList<>();
-        mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_translate));
-        mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_scale));
-        mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_rotate));
-        mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_alpha));
-        mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_all));
+        mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_translate));  // 平移动画
+        mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_scale));  // 缩放动画
+        mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_rotate));  // 旋转动画
+        mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_alpha));  // 透明动画
+        mAnimations.add(AnimationUtils.loadAnimation(context, R.anim.anim_all));  // 动画合集
 
         final Rotate3dAnimation anim = new Rotate3dAnimation(0.0f, 720.0f, 100.0f, 100.0f, 0.0f, false);
         anim.setDuration(2000);
-        mAnimations.add(anim);
+        mAnimations.add(anim);  // 自定义动画
     }
 
     private static class GridAdapter extends RecyclerView.Adapter<GridViewHolder> {
@@ -95,15 +93,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override public void onBindViewHolder(final GridViewHolder holder, final int position) {
+            setAnimation(holder.getContainer(), position);  // 设置左侧滑动的动画效果
+
             holder.getImageView().setImageResource(mImages[position]);
             holder.getButton().setText(mTexts[position]);
 
             switch (position) {
-                case 8: // 使用差值属性动画
-                    performListenerAnimation(holder.getImageView(), 0, Utils.dp2px(mContext, 120));
+                case 6: // 使用帧动画
+                    holder.getImageView().setImageResource(mFrame);
                     holder.getButton().setOnClickListener(new View.OnClickListener() {
                         @Override public void onClick(View v) {
-                            performListenerAnimation(holder.getImageView(), 0, Utils.dp2px(mContext, 120));
+                            ((AnimationDrawable) holder.getImageView().getDrawable()).start();
                         }
                     });
                     break;
@@ -115,11 +115,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     break;
-                case 6: // 使用帧动画
-                    holder.getImageView().setImageResource(mFrame);
+                case 8: // 使用差值属性动画
+                    performListenerAnimation(holder.getImageView(), 0, Utils.dp2px(mContext, 120));
                     holder.getButton().setOnClickListener(new View.OnClickListener() {
                         @Override public void onClick(View v) {
-                            ((AnimationDrawable) holder.getImageView().getDrawable()).start();
+                            performListenerAnimation(holder.getImageView(), 0, Utils.dp2px(mContext, 120));
                         }
                     });
                     break;
@@ -132,8 +132,6 @@ public class MainActivity extends AppCompatActivity {
                     });
                     break;
             }
-
-            setAnimation(holder.getContainer(), position);
         }
 
         /**
@@ -145,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         private void setAnimation(View viewToAnimate, int position) {
             if (position > mLastPosition || mLastPosition == -1) {
                 Animation animation = AnimationUtils.loadAnimation(mContext, android.R.anim.slide_in_left);
+                animation.setDuration(3000);
                 viewToAnimate.startAnimation(animation);
                 mLastPosition = position;
             }
